@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
+
 //Creating a Product
 app.post("/product", async (req, res) => {
   const prod = req.body;
@@ -30,39 +31,51 @@ app.post("/product", async (req, res) => {
   }
 });
 
+
 //Getting All Products
-app.get("/products", async (req, res) => {
-  try {
+app.get("/products", async(req, res) => {
+try{
     const all = await prisma.products.findMany();
-    if (all) {
-      res.send({
-        message: "All Products",
-        data: all,
-      });
+    if(all){
+        res.send({
+            message:"All Products",
+            data: all
+        })
     }
-  } catch (e) {
-    console.log("There Was some was an error please try again");
-  }
+}
+catch(e){
+    console.log("There Was some was an error please try again")
+}
+
 });
 
 //Getting Specific Product
-app.get("/products/:id", async (req, res) => {
-  try {
-    const productID = req.params.id;
-    const specificProduct = await prisma.products.findFirst({
-      where: {
-        productID,
-      },
-    });
-    console.log(specificProduct);
-  } catch (e) {
-    console.log("An internal error Occured");
-  }
+app.get("/products/:id", async(req, res) => {
+try{
+    const productID = req.params.id
+    var specificProduct = await prisma.products.findFirst({
+        where:{
+            productID
+        }
+    })
+
+}
+catch(e){
+    console.log("An internal error Occured")
+}
+if(specificProduct){
+    res.send({
+        message:"Your Product",
+        data:specificProduct
+    })
+}
 });
 
+
+// Updating a Product
 app.patch("/products/:productID", (req, res) => {
   const id = req.params.productID;
-  res.send(`Successfully updated a product with id ${id}`);
+
 });
 
 app.delete("/products/:productID", (req, res) => {
