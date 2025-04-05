@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
+//Creating a Product
 app.post("/product", async (req, res) => {
   const prod = req.body;
   try {
@@ -29,12 +30,34 @@ app.post("/product", async (req, res) => {
   }
 });
 
-app.get("/products", (req, res) => {
-  res.send("Getting All the Products");
+//Getting All Products
+app.get("/products", async (req, res) => {
+  try {
+    const all = await prisma.products.findMany();
+    if (all) {
+      res.send({
+        message: "All Products",
+        data: all,
+      });
+    }
+  } catch (e) {
+    console.log("There Was some was an error please try again");
+  }
 });
 
-app.get("/products/:id", (req, res) => {
-  res.send("Getting a Specific Product");
+//Getting Specific Product
+app.get("/products/:id", async (req, res) => {
+  try {
+    const productID = req.params.id;
+    const specificProduct = await prisma.products.findFirst({
+      where: {
+        productID,
+      },
+    });
+    console.log(specificProduct);
+  } catch (e) {
+    console.log("An internal error Occured");
+  }
 });
 
 app.patch("/products/:productID", (req, res) => {
