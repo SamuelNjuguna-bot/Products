@@ -73,13 +73,33 @@ if(specificProduct){
 
 
 // Updating a Product
-app.patch("/products/:productID", (req, res) => {
-  const id = req.params.productID;
-
+app.patch("/products/:productID", async(req, res) => {
+  const productID = req.params.productID;
+  const {productName, description, remaining_products, price, isOnOffer} = req.body
+  await prisma.products.update({
+    where:{
+        productID
+    },
+    data:{
+        productsTitle: productName&&productName,
+        productsDescription: description&&description,
+        unitsLeft:remaining_products && remaining_products,
+        pricePerProduct: price && price,
+        isOnOffer: isOnOffer&&isOnOffer
+    }
+    
+  });
+  
 });
 
-app.delete("/products/:productID", (req, res) => {
-  res.send("Succesfully deleted Item X");
+app.delete("/products/:productID", async(req, res) => {
+  const productID = req.params.productID
+   await prisma.products.delete({
+    where:{
+        productID
+    }
+   });
+  
 });
 
 app.get("/products/:productID", (req, res) => {
