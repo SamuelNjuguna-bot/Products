@@ -92,6 +92,8 @@ app.patch("/products/:productID", async(req, res) => {
   
 });
 
+
+//Deleting A Product
 app.delete("/products/:productID", async(req, res) => {
   const productID = req.params.productID
    await prisma.products.delete({
@@ -102,8 +104,19 @@ app.delete("/products/:productID", async(req, res) => {
   
 });
 
-app.get("/products/:productID", (req, res) => {
-  res.send("Getting All Items On Offer");
+//All Products On Offer
+app.get("/offer/products", async(req, res) => {
+    const productsOnoffer = await prisma.products.findMany({
+        where:{
+            isOnOffer:false
+        }
+    });
+    if(productsOnoffer){
+        res.send({
+            message:"product on Offer",
+            data:productsOnoffer
+        })
+    }
 });
 
 app.listen(3000, () => {
