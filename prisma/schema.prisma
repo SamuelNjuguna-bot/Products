@@ -1,0 +1,22 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Products{
+  productID String @id @default(uuid())
+  productsTitle String @map("product_name")
+  productsDescription String @map("description")
+  unitsLeft Int @map("remaining_products")
+  pricePerProduct Float @map("price")
+  isOnOffer Boolean 
+
+
+  @@map("products")
+
+}
