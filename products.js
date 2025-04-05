@@ -96,11 +96,16 @@ app.patch("/products/:productID", async(req, res) => {
 //Deleting A Product
 app.delete("/products/:productID", async(req, res) => {
   const productID = req.params.productID
-   await prisma.products.delete({
+   const deleted = await prisma.products.delete({
     where:{
         productID
     }
    });
+   if(deleted){
+    res.send({
+        message: "Product deleted successfully"
+    })
+   }
   
 });
 
